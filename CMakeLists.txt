@@ -13,22 +13,15 @@ cmake_minimum_required( VERSION 3.14 )
 # Tests by glob *_test.cpp *_test.c
 # Benchmarks by glob *_bench.cpp *_bench.c
 
-include(${CMAKE_SOURCE_DIR}/settings.cmake)
+option( TEST      "Build tests" ON )
 
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
-# Include cmake prescript from cmake dir
-file(GLOB cmakeFiles ${DIR_PRESCRIPT}/*.cmake)
-foreach(cmakeFile ${cmakeFiles})
-	message("INCLUDE ${cmakeFile}")
-	INCLUDE(${cmakeFile})
-endforeach(cmakeFile)
+project( mallocstat )
 
-project( ${PROJECT} )
-
-file(GLOB cmakeFiles ${DIR_SCRIPT}/*.cmake)
+file(GLOB cmakeFiles cmake/*.cmake)
 foreach(cmakeFile ${cmakeFiles})
 	message("INCLUDE ${cmakeFile}")
 	INCLUDE(${cmakeFile})
@@ -38,30 +31,18 @@ if(BENCH)
 	set(TEST ON)
 endif()
 
-if ( DEFINED DIR_INCLUDES )
-	# Includes in separate directory, also include dependecies headers
-	include_directories( ${DIR_INCLUDES} )
-endif()
+include_directories( include )
 
 if(DEFINED ENV{DEVENV})
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
-foreach ( dir IN LISTS DIR_SUB )
-	message("ADD ${dir}")
-	add_subdirectory( ${dir} )
-endforeach()
+message("ADD src")
+add_subdirectory( "src" )
 
 if (TEST)
 	#enable_testing()
 	include (CTest)
-	if ( DEFINED DIR_TESTS )
-		#set enable testing
-		foreach ( dir IN LISTS DIR_TESTS )
-			message("ADD TEST ${dir}")
-			add_subdirectory( ${dir} )
-		endforeach()
-	endif()
+	message("ADD TEST test")
+	add_subdirectory( "test" )
 endif() # END TEST
-
-include(${CMAKE_SOURCE_DIR}/options_print.cmake)
