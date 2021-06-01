@@ -1,9 +1,4 @@
 option( TEST      "Build tests" ON )
-option( BENCH     "Build benchmarks" OFF )
-option( ASAN      "Adds sanitize flags" OFF )
-option( TSAN      "Adds thread sanitize flags" OFF )
-option( PROFILE   "Enable profiling with gperftools" OFF )
-option( DEBUGINFO "Add debug info" ON )
 
 set( PROJECT mallocstat )
 

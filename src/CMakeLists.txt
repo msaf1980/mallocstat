@@ -1,18 +1,14 @@
-set ( MAIN_TARGET ${PROJECT} )
+set ( MALLOCSTAT_TARGET mallocstat )
 
-set ( MAIN_SOURCES )
-set ( MAIN_LIBRARIES )
-set ( MAIN_INCLUDES )
-
-#list( APPEND MAIN_INCLUDES ${CXXOPTS_INCLUDE_DIR} )
-#list( APPEND MAIN_INCLUDES ${CONAN_INCLUDE_DIRS_FMT} )
-#list( APPEND MAIN_LIBRARIES fmt )
+set ( MALLOCSTAT_SOURCES )
+set ( MALLOCSTAT_LIBRARIES )
+set ( MALLOCSTAT_INCLUDES )
 
 # Scan dir for standart source files
-aux_source_directory( ${CMAKE_CURRENT_SOURCE_DIR} MAIN_SOURCES )
+aux_source_directory( ${CMAKE_CURRENT_SOURCE_DIR} MALLOCSTAT_SOURCES )
 
 # Add executable target
-add_library( "${MAIN_TARGET}" SHARED ${MAIN_SOURCES} )
-target_include_directories( "${MAIN_TARGET}" PRIVATE ${MAIN_INCLUDES} )
-target_link_libraries( "${MAIN_TARGET}" ${MAIN_LIBRARIES} )
-install( TARGETS "${MAIN_TARGET}" DESTINATION "${CMAKE_INSTALL_BINDIR}" )
+add_library( "${MALLOCSTAT_TARGET}" SHARED ${MALLOCSTAT_SOURCES} )
+target_include_directories( "${MALLOCSTAT_TARGET}" PRIVATE ${MALLOCSTAT_INCLUDES} )
+target_link_libraries( "${MALLOCSTAT_TARGET}" ${MALLOCSTAT_LIBRARIES} )
+install( TARGETS "${MALLOCSTAT_TARGET}" DESTINATION "${CMAKE_INSTALL_BINDIR}" )
