@@ -19,6 +19,11 @@ int main(int argc, const char *argv[])
         free(p);
     }
     duration = (double) (clock_ns() - start) / count;
-    
+
+#ifdef SYS_MALLOC
+    printf("sys ");
+#else
+    printf("mallocstat ");
+#endif
     printf("malloc/free %.2f ns\n", duration);
 }

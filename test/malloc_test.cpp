@@ -1,48 +1,49 @@
 #include <mallocstat.h>
 
-#define CTEST_MAIN
+#define CATCH_CONFIG_MAIN
 
-#include "ctest.h"
+#include "catch.hpp"
 
-CTEST(malloc, test_simple) {
+TEST_CASE( "simple", "[malloc]" ) {
     alloc_statistic stat, check;
-    void *p;
+    char *p;
 
     check.count = 0;
     check.bytes = 0;
     check.failed = 0;
     get_alloc_stat(&stat); // reset statistic
    
-    p = malloc(1024);
+    p = new char[1024];
     if (p) {
         check.count++;
         check.bytes += 1024;
     } else {
         check.failed++;
     }
+    delete[] p;
 
     get_alloc_stat(&stat);
     if (p) {
-        ASSERT_EQUAL_U(check.count, stat.count);
-        ASSERT_EQUAL_U(check.bytes, stat.bytes);
+        REQUIRE(check.count == stat.count);
+        REQUIRE(check.bytes == stat.bytes);
     } else {
-        ASSERT_EQUAL_U(check.failed, stat.failed);
+        REQUIRE(check.failed == stat.failed);
     }
 
     check.count = 0;
     check.bytes = 0;
     check.failed = 0;
 
-    p = malloc(512);
+    p = new char[512];
     if (p) {
         check.count++;
         check.bytes += 512;
     } else {
         check.failed++;
     }
-    free(p);
+    delete[] p;
 
-    p = malloc(128);
+    p = static_cast<char *>(malloc(128));
     if (p) {
         check.count++;
         check.bytes += 128;
@@ -53,21 +54,15 @@ CTEST(malloc, test_simple) {
 
     get_alloc_stat(&stat);
     if (p) {
-        ASSERT_EQUAL_U(check.count, stat.count);
-        ASSERT_EQUAL_U(check.bytes, stat.bytes);
+        REQUIRE(check.count == stat.count);
+        REQUIRE(check.bytes == stat.bytes);
     } else {
-        ASSERT_EQUAL_U(check.failed, stat.failed);
+        REQUIRE(check.failed == stat.failed);
     }
 
     /* check for reset counters at previous get_alloc_stat */
     get_alloc_stat(&stat);
-    ASSERT_EQUAL_U(0, stat.count);
-    ASSERT_EQUAL_U(0, stat.bytes);
-    ASSERT_EQUAL_U(0, stat.failed);
-}
-
-
-int main(int argc, const char *argv[])
-{
-    return ctest_main(argc, argv);
+    REQUIRE(0 == stat.count);
+    REQUIRE(0 == stat.bytes);
+    REQUIRE(0 == stat.failed);
 }
