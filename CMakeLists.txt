@@ -46,3 +46,5 @@ if (TEST)
 	message("ADD TEST test")
 	add_subdirectory( "test" )
 endif() # END TEST
+
+include(package.cmake)
